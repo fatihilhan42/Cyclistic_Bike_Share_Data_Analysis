@@ -1,0 +1,445 @@
+---
+title: "**Cyclistic Bike Share Data Analysis**"
+author: "Fatih İLHAN"
+date: "2023-22-02"
+output: html_document
+---
+
+## **Google Data Analytics Capstone Project: How Does a Bike-Share Navigate Speedy Success?**
+
+### Introduction
+
+The Cyclistic case study is part of the Google Professional Data Analytics Certification. In this case study, I play the role of a junior data analyst at Cyclistic. I will follow basic data analysis process steps to solve core business problems.
+
+I'm a junior data analyst working on the marketing analyst team at Cyclistic, a bike-sharing company in Chicago. The marketing manager believes the company's future success will depend on maximizing annual memberships. Therefore, as a marketing team, he wants to understand how cyclistic bikes are used in different ways according to membership types. Here, my task will be to review and analyze 12 months of data, to obtain insights from this data through certain visualizations and present it to the team. I have analyzed very specific data and tried to support these insights with clear graphs so that my suggestions can be taken into account.
+
+I downloaded the datasets from the link below.
+
+The previous 12 months of Cyclistic trip data <https://divvy-tripdata.s3.amazonaws.com/index.html>.
+
+### Let's start with the installation of the required packages;
+
+```{r}
+library(tidyverse) #calculations
+library(lubridate) #dates 
+library(hms) #time
+library(data.table) #exporting data frame
+```
+
+Now we define the data set we prepared before;
+
+```{r}
+Cyclistic_Tableau <- read.csv("C:/Users/Casper/Desktop/Kurslar/Google Data Analytics/8.course/Case Study 1 (Cyclistic trip data 12 Months)/CSV/cyclistic_data.csv")
+```
+Now let's look at the results of our analysis step by step;
+
+### Total Rides
+```{r}
+#Total number of rides
+nrow(Cyclistic_Tableau)
+```
+In this data frame, we have a total of 5,651,522 rides. It took place between January 2022 and December 2022.
+
+### Total Rides by User Type
+```{r}
+#member type 
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  count(member_casual)
+```
+
+### Total Rides by per Bike Type
+```{r}
+#Member types and total rides by bike type.
+Cyclistic_Tableau %>% 
+  group_by(member_casual, rideable_type) %>% 
+  count(rideable_type)
+```
+When we group our data according to bike types; It was observed that casual members preferred the most electric bike type with 1,250,959 rides, while annual members preferred the classic bike type the most with 1,705,809 rides. 
+
+### Riding by the Hours
+```{r}
+#Driving by the hours
+#total rides by member type
+Cyclistic_Tableau %>% 
+  group_by(member_casual) %>%
+  count(hour) %>%
+  print(n=48)
+#total rides 
+Cyclistic_Tableau %>% 
+  count(hour) %>%
+  print() 
+```
+When the number of driving hours of the day according to the user type is examined, it is clearly seen that the annual and casual members drive more especially in the afternoon and evening hours. 
+
+### Riding by Day
+
+```{r}
+# Riding by Day
+
+# -morning-
+
+#total rides by member type
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  filter(time_of_day == "Morning") %>% 
+  count(time_of_day)
+
+#Total Rides
+Cyclistic_Tableau %>%
+  filter(time_of_day == "Morning") %>% 
+  count(time_of_day)
+
+# -afternoon- 
+
+#total rides by member type
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  filter(time_of_day == "Afternoon") %>% 
+  count(time_of_day)
+
+#Total Rides
+Cyclistic_Tableau %>%
+  filter(time_of_day == "Afternoon") %>% 
+  count(time_of_day)
+
+# -evening- 
+#total rides by member type
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  filter(time_of_day == "Evening") %>% 
+  count(time_of_day)
+
+#Total Rides
+Cyclistic_Tableau %>%
+  filter(time_of_day == "Evening") %>% 
+  count(time_of_day)
+
+# -night-
+#total rides by member type
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  filter(time_of_day == "Night") %>% 
+  count(time_of_day)
+
+#Total Rides
+Cyclistic_Tableau %>%
+  filter(time_of_day == "Night") %>% 
+  count(time_of_day)
+
+# -all times of day- 
+#Total rides by member type
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  count(time_of_day)
+
+#number of rides
+Cyclistic_Tableau %>%
+  group_by(time_of_day) %>%
+  count(time_of_day)
+
+```
+The driving behaviors of the users in certain time periods of the day were examined. According to these reviews, it has been observed that annual and casual members have a higher driving percentage in the Afternoon compared to other time periods. While the evening time period has the second highest percentage of driving, the least driving occurred at night.
+
+It is noteworthy that casual members have a higher percentage of driving at night than annual members.
+
+### Riding by the Weekday
+
+```{r}
+# -Day of The Week-
+#total rides by member type
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  count(day_of_week)
+
+#total rides
+Cyclistic_Tableau %>%
+  count(day_of_week)
+
+```
+When we examine according to the days of the week, it has been observed that most weekend driving takes place. It is assumed that the most important reason for this is that the members prefer to tour by bike as a weekend activity, since they have weekend holidays.
+
+### Riding weekday by the Member Type
+If we divide this analysis according to member types, it is observed that casual members reach the highest number of rides on Saturdays, while annual members reach the highest number of rides on Thursdays. Annual members made more rides on all other days in total number of rides except Saturday. 
+
+```{r}
+# -Day of The Month-
+#Total rides by member type
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  count(day) %>%
+  print(n = 62)
+
+#total rides 
+Cyclistic_Tableau %>%
+  count(day) %>%
+  print()
+
+#- MONTH-
+#total rides by member
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  count(month) %>%
+  print(n=24)
+  
+Cyclistic_Tableau %>%
+  count(month)
+
+```
+When we group our total number of rides by months, we observe that the highest number of rides occurs in july with 14.53 percent. Again, with 13.87% and 13.57 % of our total driving numbers, August and June were observed as the months with the most driving. It was clearly seen that December, January and February had the lowest driving percentages. 
+
+### Rides by The Seasons
+```{r}
+# --SEASONS- 
+
+# -Spring-
+
+#total rides by member type
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  filter(season == "Spring") %>%
+  count(season)
+
+#Total rides 
+Cyclistic_Tableau %>%
+  filter(season == "Spring") %>%
+  count(season)
+
+# -summer- 
+
+#Total rides by member type
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  filter(season == "Summer") %>%
+  count(season)
+
+
+#Total rides 
+Cyclistic_Tableau %>%
+  filter(season == "Summer") %>%
+  count(season)
+
+# -Fall-
+
+#Total rides by member type
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  filter(season == "Fall") %>%
+  count(season)
+
+Cyclistic_Tableau %>%
+  filter(season == "Fall") %>%
+  count(season)
+
+# -Winter-
+
+#Total rides by member type
+Cyclistic_Tableau %>%
+  group_by(member_casual) %>%
+  filter(season == "Winter") %>%
+  count(season)
+
+Cyclistic_Tableau %>%
+  filter(season == "Winter") %>%
+  count(season)
+
+# - All seasons- 
+
+#Total rides by member type
+
+Cyclistic_Tableau %>%
+  group_by(season, member_casual) %>%
+  count(season)
+
+#total rides
+Cyclistic_Tableau %>%
+  group_by(season) %>%
+  count(season)
+
+```
+
+### Analysis of Average Riding Times
+
+**Average Ride Length**
+```{r}
+# -Average Ride Length-
+
+#average of ride_length
+Cyclistic_avgRide <- mean(Cyclistic_Tableau$ride_length)
+print(Cyclistic_avgRide)
+
+# -Member Type- 
+#average ride_length
+Cyclistic_Tableau %>% group_by(member_casual) %>% 
+  summarise_at(vars(ride_length), list(time = mean))
+
+# -Type of Bike-
+Cyclistic_Tableau %>% group_by(member_casual, rideable_type) %>% 
+  summarise_at(vars(ride_length), list(time = mean))
+
+Cyclistic_Tableau %>% group_by(rideable_type) %>% 
+  summarise_at(vars(ride_length), list(time = mean))
+
+
+# -HOUR-
+# average ride_length by member type
+Cyclistic_Tableau %>% group_by(hour,member_casual) %>% 
+  summarise_at(vars(ride_length), list(time = mean)) %>% 
+  print(n=48)
+
+#average ride_length
+Cyclistic_Tableau %>% group_by(hour) %>% 
+  summarise_at(vars(ride_length), list(time = mean)) %>% 
+  print(n=24)
+
+# -Tıme Of Day- 
+
+# -morning-
+#average ride length by member type
+Cyclistic_Tableau %>% group_by(member_casual) %>% 
+  filter(time_of_day == "Morning") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+#average ride length
+Cyclistic_Tableau %>% filter(time_of_day == "Morning") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+#- afternoon-
+#average ride length by member type
+Cyclistic_Tableau %>% group_by(member_casual) %>% 
+  filter(time_of_day == "Afternoon") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+
+#average ride length
+Cyclistic_Tableau %>% filter(time_of_day == "Afternoon") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+
+# -evening- 
+# average ride length by member type
+Cyclistic_Tableau %>% group_by(member_casual) %>% 
+  filter(time_of_day == "Evening") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+#average ride length
+Cyclistic_Tableau %>% filter(time_of_day == "Evening") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+
+# -Night-
+# average ride length by member type
+Cyclistic_Tableau %>% group_by(member_casual) %>% 
+  filter(time_of_day == "Night") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+#average ride length
+Cyclistic_Tableau %>% filter(time_of_day == "Night") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+
+
+# -All times of day-
+# average ride length by member type
+Cyclistic_Tableau %>% group_by(time_of_day,member_casual) %>% 
+  summarise_at(vars(ride_length), list(time=mean))
+
+#average ride length
+Cyclistic_Tableau %>% group_by(time_of_day) %>% 
+  summarise_at(vars(ride_length), list(time=mean))
+
+# --DAY OF THE WEEK- 
+#average ride_length by member type
+Cyclistic_Tableau %>% group_by(member_casual, day_of_week) %>% 
+  summarise_at(vars(ride_length), list(time=mean))
+
+#average ride length
+Cyclistic_Tableau %>% group_by(day_of_week) %>% 
+  summarise_at(vars(ride_length), list(time=mean))
+
+
+# -DAY OF THE MONTH-
+#average ride_length by member type
+Cyclistic_Tableau %>% group_by(day,member_casual) %>% 
+  summarise_at(vars(ride_length), list(time=mean)) %>%
+  print(n=62)
+
+#average ride_length
+Cyclistic_Tableau %>% group_by(day) %>% 
+  summarise_at(vars(ride_length), list(time=mean)) %>%
+  print(n=31)
+
+
+# -MONTH-
+#average ride_length by member type
+Cyclistic_Tableau %>% group_by(month,member_casual) %>% 
+  summarise_at(vars(ride_length), list(time=mean)) %>%
+  print(n=24)
+
+#average ride_length
+Cyclistic_Tableau %>% group_by(month) %>% 
+  summarise_at(vars(ride_length), list(time=mean)) %>%
+  print(n=12)  
+
+
+# -SEASON-
+
+# -SPRİNG-
+
+#average ride_length by member type
+Cyclistic_Tableau %>% group_by(member_casual) %>%
+  filter(season == "Spring") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+#average ride length 
+Cyclistic_Tableau %>% 
+  filter(season == "Spring") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+# -SUMMER- 
+#average ride_length by member type
+Cyclistic_Tableau %>% group_by(member_casual) %>%
+  filter(season == "Summer") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+#average ride length 
+Cyclistic_Tableau %>% 
+  filter(season == "Winter") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+# -Fall-
+#average ride_length by member type
+Cyclistic_Tableau %>% group_by(member_casual) %>%
+  filter(season == "Fall") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+#average ride length 
+Cyclistic_Tableau %>% 
+  filter(season == "Fall") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+# -WİNTER- 
+#average ride_length by member type
+Cyclistic_Tableau %>% group_by(member_casual) %>%
+  filter(season == "Winter") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+#average ride length 
+Cyclistic_Tableau %>% 
+  filter(season == "Winter") %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+
+# -ALL SEASONS- 
+#average ride_length by member type
+Cyclistic_Tableau %>% group_by(season, member_casual) %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+Cyclistic_Tableau %>% group_by(season) %>%
+  summarise_at(vars(ride_length), list(time=mean))
+
+```
+The average ride length is defined as the average of the numbers (ride length) obtained by subtracting the start time from the ride finish time. With the analysis made, the average driving length was measured as 16.36 minutes.
+
+When the user types are examined, it is seen that casual members have an average driving length of 22 minutes, and annual members have an average driving length of 12.4 minutes.
+
