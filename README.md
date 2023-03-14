@@ -1,4 +1,6 @@
-# Cyclistic Bike-Share: Google Data Analytics Capstone Projec
+# Cyclistic Bike-Share: Google Data Analytics Capstone Project
+
+![Cyclistic](https://user-images.githubusercontent.com/63750425/224968385-9521ab10-d278-4595-a829-08b4f1c645be.png)
 
 This repo contains the Google Data Analytics Capstone - Case Study 1 project, which is the final stage of the Google Data Analytics course on coursera. The description of the code and analysis is posted on my Kaggle account. I hope this repo will help everyone who wants to do this project. thanks.
 
